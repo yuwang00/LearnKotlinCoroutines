@@ -31,8 +31,8 @@ class TimeConsumingViewModel : ViewModel() {
         }
 
         Log.i(TAG, "after:$isMainThread")
-        //2021-06-06 18:33:48.117 10767-10767/com.example.testcoroutines I/TimeConsumingViewModel: after:true
-        //2021-06-06 18:33:48.120 10767-10850/com.example.testcoroutines I/TimeConsumingViewModel: launch before:false
+        // after:true
+        // launch before:false
     }
 
     private fun runInMainThread(){

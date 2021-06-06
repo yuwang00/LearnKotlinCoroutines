@@ -1,9 +1,13 @@
 package com.example.testcoroutines
 
 import android.os.Bundle
+import android.util.Log
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.coroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  *
@@ -13,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
  * desc   :
  * version: 1.0
  */
+private const val TAG = "TestLifecycleActivity"
 class TestLifecycleActivity : AppCompatActivity() {
     private val viewModel: TimeConsumingViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,7 +27,12 @@ class TestLifecycleActivity : AppCompatActivity() {
             finish()
         }
         findViewById<TextView>(R.id.execute).setOnClickListener {
-            viewModel.timeConsumingMethod()
+            lifecycle.coroutineScope.launch {
+                Log.i(TAG, "launch before")
+                delay(3000)
+                Log.i(TAG, "launch after")
+            }
         }
+        // launch before
     }
 }
