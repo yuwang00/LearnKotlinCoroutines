@@ -6,12 +6,12 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
-    private val networkViewModel: NetworkViewModel by viewModels()
+    private val viewModel: TimeConsumingViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        findViewById<TextView>(R.id.test).setOnClickListener {
-            networkViewModel.login("","")
+        findViewById<TextView>(R.id.execute).setOnClickListener {
+            viewModel.timeConsumingMethod()
         }
     }
 }
