@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  *
@@ -23,16 +24,22 @@ class TimeConsumingViewModel : ViewModel() {
         get() = Looper.getMainLooper() == Looper.myLooper()
 
     fun timeConsumingMethod() {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             Log.i(TAG, "launch before:$isMainThread")
-            delay(3000)
+            sleepThreeSec()
             runInMainThread()
             Log.i(TAG, "launch after:$isMainThread")
         }
 
         Log.i(TAG, "after:$isMainThread")
+        // launch before:true
         // after:true
-        // launch before:false
+    }
+
+    private suspend fun sleepThreeSec(){
+        withContext(Dispatchers.IO){
+            Thread.sleep(3000)
+        }
     }
 
     private fun runInMainThread(){

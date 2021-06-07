@@ -27,12 +27,7 @@ class TestLifecycleActivity : AppCompatActivity() {
             finish()
         }
         findViewById<TextView>(R.id.execute).setOnClickListener {
-            lifecycle.coroutineScope.launch {
-                Log.i(TAG, "launch before")
-                delay(3000)
-                Log.i(TAG, "launch after")
-            }
+            viewModel.timeConsumingMethod()
         }
-        // launch before
     }
 }
