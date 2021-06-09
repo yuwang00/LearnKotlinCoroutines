@@ -26,23 +26,27 @@ class TimeConsumingViewModel : ViewModel() {
     fun timeConsumingMethod() {
         viewModelScope.launch {
             Log.i(TAG, "launch before:$isMainThread")
-            sleepThreeSec()
+            val result = sleepThreeSec()
             runInMainThread()
-            Log.i(TAG, "launch after:$isMainThread")
+            Log.i(TAG, "launch after:$isMainThread,result:$result")
         }
 
         Log.i(TAG, "after:$isMainThread")
         // launch before:true
         // after:true
+        // runInMainThread:true
+        // launch after:true,result:1
     }
 
-    private suspend fun sleepThreeSec(){
-        withContext(Dispatchers.IO){
-            Thread.sleep(3000)
+    private suspend fun sleepThreeSec(): Int {
+        return withContext(Dispatchers.IO) {
+            delay(3000)
+            // 假设耗时三秒计算出结果
+            1
         }
     }
 
-    private fun runInMainThread(){
+    private fun runInMainThread() {
         // 假设该方法需要运行在主线程
         Log.i(TAG, "runInMainThread:$isMainThread")
     }
