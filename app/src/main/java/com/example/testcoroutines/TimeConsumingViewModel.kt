@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -29,18 +30,16 @@ class TimeConsumingViewModel : ViewModel() {
             Log.i(TAG, "launch before:$isMainThread")
             val firJob = async { sleepThreeSec() }
             val secJob = async { sleepTwoSec() }
-            val firResult = firJob.await()
-            val secResult = secJob.await()
+            listOf(firJob, secJob).awaitAll()
             runInMainThread()
-            Log.i(TAG, "launch after:$isMainThread,result:${firResult + secResult}")
+            Log.i(TAG, "launch after:$isMainThread")
         }
 
         Log.i(TAG, "after:$isMainThread")
         // 已执行，注意时间戳
-        // 2021-06-21 20:38:31.581 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: launch before:true
-        // 2021-06-21 20:38:31.583 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: after:true
-        // 2021-06-21 20:38:34.586 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: runInMainThread:true
-        // 2021-06-21 20:38:34.586 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: launch after:true,result:3
+        // 2021-06-21 20:50:51.769 17505-17505/com.example.testcoroutines I/TimeConsumingViewModel: launch before:true
+        // 2021-06-21 20:50:51.775 17505-17505/com.example.testcoroutines I/TimeConsumingViewModel: after:true
+        // 2021-06-21 20:50:54.780 17505-17505/com.example.testcoroutines I/TimeConsumingViewModel: runInMainThread:true
     }
 
     private suspend fun sleepThreeSec(): Int {
