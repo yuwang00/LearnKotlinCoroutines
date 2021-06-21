@@ -27,18 +27,20 @@ class TimeConsumingViewModel : ViewModel() {
     fun timeConsumingMethod() {
         viewModelScope.launch {
             Log.i(TAG, "launch before:$isMainThread")
-            val result = async { sleepThreeSec() }
-            val secResult = async { sleepTwoSec() }
+            val firJob = async { sleepThreeSec() }
+            val secJob = async { sleepTwoSec() }
+            val firResult = firJob.await()
+            val secResult = secJob.await()
             runInMainThread()
-            Log.i(TAG, "launch after:$isMainThread")
+            Log.i(TAG, "launch after:$isMainThread,result:${firResult + secResult}")
         }
 
         Log.i(TAG, "after:$isMainThread")
-        // 并未执行，注意时间戳
-        // 2021-06-09 19:16:07.630 14637-14637/com.example.testcoroutines I/TimeConsumingViewModel: launch before:true
-        // 2021-06-09 19:16:07.646 14637-14637/com.example.testcoroutines I/TimeConsumingViewModel: runInMainThread:true
-        // 2021-06-09 19:16:07.646 14637-14637/com.example.testcoroutines I/TimeConsumingViewModel: launch after:true
-        // 2021-06-09 19:16:07.682 14637-14637/com.example.testcoroutines I/TimeConsumingViewModel: after:true
+        // 已执行，注意时间戳
+        // 2021-06-21 20:38:31.581 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: launch before:true
+        // 2021-06-21 20:38:31.583 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: after:true
+        // 2021-06-21 20:38:34.586 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: runInMainThread:true
+        // 2021-06-21 20:38:34.586 16291-16291/com.example.testcoroutines I/TimeConsumingViewModel: launch after:true,result:3
     }
 
     private suspend fun sleepThreeSec(): Int {
