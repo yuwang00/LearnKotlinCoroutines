@@ -18,14 +18,22 @@ import kotlinx.coroutines.launch
  * version: 1.0
  */
 private const val TAG = "TestLifecycleActivity"
+
 class TestLifecycleActivity : AppCompatActivity() {
     private val viewModel: TimeConsumingViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_test_lifecycle)
-        findViewById<TextView>(R.id.finish).setOnClickListener {
-            finish()
+        val job = lifecycle.coroutineScope.launch {
+            delay(5000)
+            Log.i(TAG, "job finished")
         }
+        findViewById<TextView>(R.id.finish).setOnClickListener {
+            Log.i(TAG, "button click")
+            // just print button click
+            job.cancel()
+        }
+        // print job finished
         findViewById<TextView>(R.id.execute).setOnClickListener {
             viewModel.timeConsumingMethod()
         }
